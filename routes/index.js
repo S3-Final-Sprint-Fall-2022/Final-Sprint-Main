@@ -5,31 +5,29 @@ const loginController = require("../controllers/loginControllers");
 const router = express.Router();
 
 if (DEBUG) {
-  console.log("ROUTE: /api/autos");
+    console.log("ROUTE: /api/autos");
 }
 
 router.use(express.static("public"));
 
 router.get("/", async (req, res) => {
-  if (DEBUG) console.log("login page: ");
-  res.render("login", { status: req.app.locals.status });
+    if (DEBUG) console.log("login page: ");
+    res.render("login", { status: req.app.locals.status });
 });
 
 router.post("/", loginController.getByUsername);
 
 // from http browser it has /auth/new
 router.get("/new", async (req, res) => {
-  res.render("register", { status: req.app.locals.status });
+    res.render("register", { status: req.app.locals.status });
 });
 
 router.post("/new", loginController.createUser);
 
 router.get("/exit", async (req, res) => {
-  if (DEBUG) console.log("get /exit");
-  res.redirect("/");
+    if (DEBUG) console.log("get /exit");
+    res.redirect("/");
 });
-
-module.exports = router;
 
 // router.use('/autos', require('./autos'));
 

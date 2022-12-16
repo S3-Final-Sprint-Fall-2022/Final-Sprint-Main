@@ -1,0 +1,23 @@
+<html lang="en">
+    <%- include('./partials/header.ejs') %>
+    <body>
+        <%- include('./partials/nav.ejs') %>
+        <div class="cars content">
+            <form action="/cars" method="POST">
+                <label>Keywords:
+                    <input type="text" id="keywords" name="keywords" required>
+                    <button>SEARCH</button>
+                </label>
+                
+                <b>Results: </b></br> 
+            <% if (theCars.length > 0) { %>
+                <% theCars.forEach(car => { %>
+                    <b><%= car.car_make %> <%= car.car_model %> <%= car.car_model_year %></b><br>
+                    <% }) %>
+            <% } %>
+            </br></br>
+        </form>
+        </div>
+    </body>
+    <%- include('./partials/footer.ejs') %>
+</html>
