@@ -4,7 +4,6 @@ CREATE TABLE IF NOT EXISTS public."Logins"
     username character varying(12) NOT NULL,
     password character varying(80) NOT NULL,
     email character varying(128) NOT NULL,
-    uuid uuid NOT NULL,
     CONSTRAINT "Logins_pkey" PRIMARY KEY (id)
 )
 
