@@ -5,48 +5,67 @@ const express = require("express");
 const app = express();
 const router = require("express").Router;
 
-const session = require('express-session');
+const session = require("express-session");
 const PORT = process.env.PORT || 3000;
 global.DEBUG = true;
 
-app.use(session({
+app.use(
+  session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false
-}));
+    saveUninitialized: false,
+  })
+);
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 
 // load the logEvents module
-const logEvents = require('./services/logEvents');
+const logEvents = require("./services/logEvents");
 // define/extend an EventEmitter class
-const EventEmitter = require('events');
-class MyEmitter extends EventEmitter {};
+const EventEmitter = require("events");
+class MyEmitter extends EventEmitter {}
 // initialize an new emitter object
 const myEmitter = new MyEmitter();
 // add the listener for the logEvent
-myEmitter.on('log', (event, level, msg) => logEvents(event, level, msg));
+myEmitter.on("log", (event, level, msg) => logEvents(event, level, msg));
 
 app.listen(PORT, (err) => {
   if (err) console.log(err);
   else {
-    myEmitter.emit('log', 'app.listen()', 'INFO', `application successfully started on port ${PORT}.`);
+    myEmitter.emit(
+      "log",
+      "app.listen()",
+      "INFO",
+      `application successfully started on port ${PORT}.`
+    );
     console.log(`Simple app running on port ${PORT}.`);
   }
 });
 
 app.get("/", async (req, res) => {
-  myEmitter.emit('log', '/ GET', 'INFO', 'Successfully displayed the index page');
+  myEmitter.emit(
+    "log",
+    "/ GET",
+    "INFO",
+    "Successfully displayed the index page"
+  );
   if (!req.session || !req.session.currentuser)
-    res.render("index", {status: null});
+    res.render("index", { status: null });
   else
-    res.render("index", {status: req.session.currentuser.username});
+    res.render("index", {
+      status: req.session.currentuser.username,
+    });
 });
 
 app.get("/about", async (req, res) => {
-  myEmitter.emit('log', '/about GET', 'INFO', 'Successfully displayed the /about page');
+  myEmitter.emit(
+    "log",
+    "/about GET",
+    "INFO",
+    "Successfully displayed the /about page"
+  );
   res.render("about");
 });
 
