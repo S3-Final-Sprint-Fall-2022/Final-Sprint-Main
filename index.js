@@ -5,7 +5,7 @@ const express = require("express");
 const app = express();
 const router = require("express").Router;
 
-const session = require("express-session");
+// const session = require("express-session");
 
 const PORT = process.env.PORT || 3000;
 global.DEBUG = true;
