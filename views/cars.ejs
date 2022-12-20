@@ -6,18 +6,40 @@
             <form action="/cars" method="POST">
                 <label>Keywords:
                     <input type="text" id="keywords" name="keywords" required>
-                    <button>SEARCH</button>
+                    <button>SEARCH</button> 
+                    <span>Postgres<input type="checkbox" name="pgCheck" id="pgCheck" value="yes"></span>
+                    <span>MongoDB<input type="checkbox" name="pgCheck" id="pgCheck" value="mDB"></span>
                 </label>
                 
+            
+                
+                
                 <b>Results: </b></br> 
+                
             <% if (theCars.length > 0) { %>
                 <% theCars.forEach(car => { %>
                     <b><%= car.car_make %> <%= car.car_model %> <%= car.car_model_year %></b><br>
                     <% }) %>
-            <% } %>
+            <% } %> 
+            
+            
             </br></br>
         </form>
         </div>
+        
     </body>
+    <script>
+        var checkbox = document.querySelector("input[name=pgCheck]");
+  let pgChecked = false
+  checkbox.addEventListener('change', function() {
+  if (this.checked) {
+  pgChecked = true
+  console.log("Checkbox is checked..");
+  } else {
+  pgChecked = false
+  console.log("Checkbox is not checked..");
+  }
+  });
+    </script>
     <%- include('./partials/footer.ejs') %>
 </html>
