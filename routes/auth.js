@@ -17,6 +17,7 @@ const myEmitter = new MyEmitter();
 // add the listener for the logEvent
 myEmitter.on('log', (event, level, msg) => logEvents(event, level, msg));
 
+// LOGIN existing user
 router.get('/', async (req, res) => {
     if(DEBUG) console.log('login page: ');
     myEmitter.emit('log', 'auth GET', 'INFO', 'Login page requested.');
@@ -33,11 +34,12 @@ router.post('/', async (req, res) => {
             req.app.locals.status = 'Incorrect user name was entered.'
             res.redirect('/auth')
         }
-        if( await bcrypt.compare(req.body.password, user.password)) {
+        else if( await bcrypt.compare(req.body.password, user.password)) {
             // change using app.locals to use session or java web token (jwt)
             myEmitter.emit('log', 'auth GET', 'INFO', 'Happy for your return ' + user.username );
             req.app.locals.user = user;
             req.app.locals.status = 'Happy for your return ' + user.username;
+            req.session.currentuser = user;
             res.redirect('/');
         } else {
             myEmitter.emit('log', 'auth GET', 'WARNING', 'Incorrect password was entered.');
@@ -53,6 +55,7 @@ router.post('/', async (req, res) => {
     }
 });
 
+// REGISTER new user
 // from http browser it has /auth/new
 router.get('/new', async (req, res) => {
     myEmitter.emit('log', 'auth/new GET', 'INFO', 'Registration page requested.');
@@ -93,6 +96,9 @@ router.post('/new', async (req, res) => {
 
 router.get('/exit', async (req, res) => {
     if(DEBUG) console.log('get /exit');
+    req.session.destroy(function(err) {
+        req.app.locals.status = 'Successfully logged out of search.'
+      })
     res.redirect('/');
 });
 
