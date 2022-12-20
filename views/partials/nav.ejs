@@ -1,6 +1,12 @@
 <nav>
   <h1>A great car will take you places</h1>
   <a href="/"><button style="color: rgb(15, 157, 208)">Home</button></a>
+  <% if (status != null && status != "Incorrect user name was entered.") {%>
   <a href="/about"><button style="color: rgb(15, 157, 208)">About</button></a>
+  <a href="/cars"><button style="color: rgb(15, 157, 208)">Cars</button></a>
+  <a href="/auth/exit"><button style="color: rgb(15, 157, 208)">Logout</button></a>
+
+    <% } %>
+    <% console.log(status)%>
   </nav><hr/>
 </nav>
