@@ -5,8 +5,15 @@ const express = require("express");
 const app = express();
 const router = require("express").Router;
 
+const session = require('express-session');
 const PORT = process.env.PORT || 3000;
 global.DEBUG = true;
+
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
+}));
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
@@ -32,7 +39,10 @@ app.listen(PORT, (err) => {
 
 app.get("/", async (req, res) => {
   myEmitter.emit('log', '/ GET', 'INFO', 'Successfully displayed the index page');
-  res.render("index", {status: req.app.locals.status});
+  if (!req.session || !req.session.currentuser)
+    res.render("index", {status: null});
+  else
+    res.render("index", {status: req.session.currentuser.username});
 });
 
 app.get("/about", async (req, res) => {
