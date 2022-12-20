@@ -11,7 +11,8 @@ async function getCarData() {
 }
 
 async function getCarDataByKeyword(keyword) {
-    let SQL = `SELECT id, car_make, car_model, car_model_year FROM public.car_data WHERE car_make = $1 OR car_model = $1 OR car_model_year = $1`;
+    let SQL = `SELECT id, car_make, car_model, car_model_year FROM public.car_data \
+        WHERE car_make = $1 OR car_model = $1 OR car_model_year = $1`;
     try {
         let results = await dal.query(SQL, [keyword]);
         return results.rows[0];
