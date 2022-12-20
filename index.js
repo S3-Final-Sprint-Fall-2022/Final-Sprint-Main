@@ -32,7 +32,7 @@ app.listen(PORT, (err) => {
 
 app.get("/", async (req, res) => {
   myEmitter.emit('log', '/ GET', 'INFO', 'Successfully displayed the index page');
-  res.render("index");
+  res.render("index", {status: req.app.locals.status});
 });
 
 app.get("/about", async (req, res) => {
