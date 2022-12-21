@@ -1,33 +1,35 @@
 {
-    "name": "final-sprint-main",
-    "version": "1.0.0",
-    "description": "Automobile search engine",
-    "main": "index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/S3-Final-Sprint-Fall-2022/Final-Sprint-Main.git"
-    },
-    "author": "Peter Rawsthorne",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/S3-Final-Sprint-Fall-2022/Final-Sprint-Main/issues"
-    },
-    "homepage": "https://github.com/S3-Final-Sprint-Fall-2022/Final-Sprint-Main#readme",
-    "dependencies": {
-        "bcrypt": "^5.1.0",
-        "date-fns": "^2.29.3",
-        "ejs": "^3.1.8",
-        "express": "^4.18.2",
-        "express-session": "^1.17.3",
-        "mongodb": "^4.12.1",
-        "pg": "^8.8.0",
-        "uuid": "^9.0.0"
-    },
-    "devDependencies": {
-        "dotenv": "^16.0.0",
-        "nodemon": "^2.0.15"
-    }
+  "name": "final-sprint-main",
+  "version": "1.0.0",
+  "description": "Automobile search engine",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/S3-Final-Sprint-Fall-2022/Final-Sprint-Main.git"
+  },
+  "author": "Peter Rawsthorne",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/S3-Final-Sprint-Fall-2022/Final-Sprint-Main/issues"
+  },
+  "homepage": "https://github.com/S3-Final-Sprint-Fall-2022/Final-Sprint-Main#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "date-fns": "^2.29.3",
+    "ejs": "^3.1.8",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "mongodb": "^4.12.1",
+    "method-override": "^3.0.0",
+    "mongoose": "^6.7.5",
+    "pg": "^8.8.0",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.0",
+    "nodemon": "^2.0.15"
+  }
 }

@@ -12,16 +12,29 @@
                 </label>
                 
             
-                
-                
-                <b>Results: </b></br> 
-                
+                <h3>Results from Postgres: </h3></br> 
             <% if (theCars.length > 0) { %>
                 <% theCars.forEach(car => { %>
                     <b><%= car.car_make %> <%= car.car_model %> <%= car.car_model_year %></b><br>
                     <% }) %>
             <% } %> 
+                
+                
             
+            <!-- MongoDB -->
+            <h3>Results from MongoDB</h3></br>
+            <% if (cars.length > 0) { %> <% cars.forEach(car => { %>
+                
+              
+                <b><%= car.car_make %> <%= car.car_model %> <%= car.car_model_year %></b>
+              
+        
+              <hr />
+              <% }) %> <% } else{ %>
+        
+              <p>There are no cars to display.</p>
+              <hr />
+              <% } %>
             
             </br></br>
         </form>
