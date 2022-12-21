@@ -1,0 +1,32 @@
+<html lang="en">
+    <%- include('./partials/header.ejs') %>
+    <body>
+        <%- include('./partials/nav.ejs') %>
+        <div class="cars content">
+            <form action="/cars" method="POST">
+                
+                <h3>Results from Postgres: </h3></br> 
+                
+            <% if (theCars.length > 0) { %>
+                <% theCars.forEach(car => { %>
+                    <b><%= car.car_make %> <%= car.car_model %> <%= car.car_model_year %></b><br>
+                    <% }) %>
+            <% } else{ %>
+
+                <p>There are no cars to display.</p>
+                <hr />
+                <% } %>
+            
+                
+                
+            
+            
+            
+            </br>
+        </form>
+        </div>
+        
+    </body>
+    
+    <%- include('./partials/footer.ejs') %>
+</html>
