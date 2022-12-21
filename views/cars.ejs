@@ -3,6 +3,7 @@
     <body>
         <%- include('./partials/nav.ejs') %>
         <div class="cars content">
+            <h2>Enter "all" in the search bar to display all results of selected database.</h2>
             <form action="/cars" method="POST">
                 <label>Keywords:
                     <input type="text" id="keywords" name="keywords" required>

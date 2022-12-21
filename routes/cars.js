@@ -17,101 +17,114 @@ const myEmitter = new MyEmitter();
 myEmitter.on("log", (event, level, msg) => logEvents(event, level, msg));
 
 const keywordLogger = (req, res, next) => {
-    Logger = {
-        user: req.app.locals.user.username,
-        keyWords: req.body.keywords,
-    };
-    const logStr = JSON.stringify(Logger);
-    const data = new Uint8Array(Buffer.from(logStr));
-    fs.appendFile("./logs/logger.txt", data, "utf8", (err) => {
-        if (err) throw err;
-        console.log("The file has been saved!");
-    });
-    next();
+  Logger = {
+    user: req.app.locals.user.username,
+    keyWords: req.body.keywords,
+  };
+  const logStr = JSON.stringify(Logger);
+  const data = new Uint8Array(Buffer.from(logStr));
+  fs.appendFile("./logs/logger.txt", data, "utf8", (err) => {
+    if (err) throw err;
+    console.log("The file has been saved!");
+  });
+  next();
 };
 
 const all_cars = (req, res, next) => {
-    const mongoAll = Car.find()
-        .sort({ createdAt: -1 })
-        .then((result) => {
-            return { cars: result };
-        })
-        .catch((err) => {
-            console.log(err);
-        });
+  const mongoAll = Car.find()
+    .sort({ createdAt: -1 })
+    .then((result) => {
+      return { cars: result };
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 
-    // const pgAll = async (req, res, next) => {
-    //   try {
-    const theCars = carsDal.getCarData();
-    myEmitter.emit(
-        "log",
-        "/cars GET",
-        "INFO",
-        "successfully listed all the cars"
-    );
-    // return theCars;
-    // }
-    // catch {
-    //   res.render("503");
-    // }
-    // };
-    // obj1 = JSON.parse(mongoAll);
-    // obj2 = JSON.parse(pgAll);
-    // newObj = { ...obj1, ...obj2 };
-    newObj = { ...theCars, ...mongoAll };
-    console.log(theCars);
-    console.log(mongoAll);
-    console.log(newObj);
-    console.log(typeof newObj);
-    res.render("carsall", { newObj });
+  // const pgAll = async (req, res, next) => {
+  //   try {
+  const theCars = carsDal.getCarData();
+  myEmitter.emit(
+    "log",
+    "/cars GET",
+    "INFO",
+    "successfully listed all the cars"
+  );
+  // return theCars;
+  // }
+  // catch {
+  //   res.render("503");
+  // }
+  // };
+  // obj1 = JSON.parse(mongoAll);
+  // obj2 = JSON.parse(pgAll);
+  // newObj = { ...obj1, ...obj2 };
+  newObj = { ...theCars, ...mongoAll };
+  console.log(theCars);
+  console.log(mongoAll);
+  console.log(newObj);
+  console.log(typeof newObj);
+  res.render("carsall", { newObj });
 };
 
 const cars_index_mongo_all = (req, res, next) => {
-    Car.find()
-        .sort({ createdAt: -1 })
-        .then((result) => {
-            res.render("carsmongo", {
-                cars: result,
-            });
-        })
-        .catch((err) => {
-            console.log(err);
-        });
+  Car.find()
+    .sort({ createdAt: -1 })
+    .then((result) => {
+      res.render("carsmongo", {
+        cars: result,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
-const cars_index_mongo = async (req, res) => {};
+const cars_index_mongo = async (req, res) => {
+  console.log("making into the function");
+  console.log(req.body.keywords);
+  try {
+    const search = await Car.find({
+      $title: { $search: req.body.keywords },
+    }).then((result) => res.render("carsmongo", { cars: result }));
+    console.log(search);
+  } catch {
+    res.render("503");
+  }
+  // const results = search.toArray();
+  // console.log(results);
+};
 
 const cars_index_pg_all = async (req, res, next) => {
-    try {
-        let theCars = await carsDal.getCarData(); // from postgresql
-        myEmitter.emit(
-            "log",
-            "/cars GET",
-            "INFO",
-            "successfully listed all the cars"
-        );
-        res.render("carspg", { theCars });
-    } catch {
-        res.render("503");
-    }
+  try {
+    let theCars = await carsDal.getCarData(); // from postgresql
+    myEmitter.emit(
+      "log",
+      "/cars GET",
+      "INFO",
+      "successfully listed all the cars"
+    );
+    res.render("carspg", { theCars });
+  } catch {
+    res.render("503");
+  }
 };
 
 const cars_index_pg = async (req, res, next) => {
-    console.log("before the try");
-    try {
-        console.log(req.body.keywords);
-        console.log("making it into the try");
-        let theCars = await carsDal.getCarDataByKeyword(req.body.keywords); // from postgresql
-        myEmitter.emit(
-            "log",
-            "/cars GET",
-            "INFO",
-            "successfully listed all the cars"
-        );
-        res.render("carspg", { theCars });
-    } catch {
-        res.render("503");
-    }
+  console.log("before the try");
+  try {
+    console.log(req.body.keywords);
+    console.log("making it into the try");
+    let theCars = await carsDal.getCarDataByKeyword(req.body.keywords); // from postgresql
+    myEmitter.emit(
+      "log",
+      "/cars GET",
+      "INFO",
+      "successfully listed all the cars"
+    );
+    res.render("carspg", { theCars });
+  } catch {
+    res.render("503");
+  }
 };
 
 // router.get("/carspg", (req, res) => {
@@ -119,38 +132,38 @@ const cars_index_pg = async (req, res, next) => {
 // });
 
 router.get("/", (req, res) => {
-    res.render("cars");
+  res.render("cars");
 });
 
 router.post("/", keywordLogger, async (req, res, next) => {
-    console.log(
-        `PG checkbox ${req.body.pgCheck}, Mongo checkbox ${
-            req.body.monCheck
-        }, the type is ${typeof req.body.monCheck}`
-    );
-    if (req.body.pgCheck != "on" && req.body.monCheck != "on") {
-        req.app.locals.status = "Please select a checkbox";
-        res.render("cars");
-    } else if (
-        req.body.pgCheck == "on" &&
-        req.body.monCheck == "on" &&
-        req.body.keywords === " "
-    ) {
-        all_cars(req, res);
-    } else if (req.body.pgCheck == "on" && req.body.keywords === " ") {
-        cars_index_pg_all(req, res);
-    } else if (req.body.pgCheck == "on") {
-        console.log(req.body.keywords);
-        cars_index_pg(req, res);
-    } else if (req.body.monCheck == "on" && req.body.keywords === " ") {
-        console.log(`it made it to the else if`);
-        cars_index_mongo_all(req, res);
-    } else if (req.body.monCheck == "on") {
-        cars_index_mongo(req, res);
-    } else {
-        console.log(`nothing applies`);
-        res.render("cars");
-    }
+  console.log(
+    `PG checkbox ${req.body.pgCheck}, Mongo checkbox ${
+      req.body.monCheck
+    }, the type is ${typeof req.body.monCheck}`
+  );
+  if (req.body.pgCheck != "on" && req.body.monCheck != "on") {
+    req.app.locals.status = "Please select a checkbox";
+    res.render("cars");
+  } else if (
+    req.body.pgCheck == "on" &&
+    req.body.monCheck == "on" &&
+    req.body.keywords === " "
+  ) {
+    all_cars(req, res);
+  } else if (req.body.pgCheck == "on" && req.body.keywords === "all") {
+    cars_index_pg_all(req, res);
+  } else if (req.body.pgCheck == "on") {
+    console.log(req.body.keywords);
+    cars_index_pg(req, res);
+  } else if (req.body.monCheck == "on" && req.body.keywords === "all") {
+    console.log(`it made it to the else if`);
+    cars_index_mongo_all(req, res);
+  } else if (req.body.monCheck == "on") {
+    cars_index_mongo(req, res);
+  } else {
+    console.log(`nothing applies`);
+    res.render("cars");
+  }
 });
 
 module.exports = router;
