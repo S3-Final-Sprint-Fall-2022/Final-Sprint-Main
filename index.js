@@ -4,10 +4,22 @@ if (process.env.NODE_ENV !== "production") {
 const express = require("express");
 const app = express();
 const router = require("express").Router;
+const mongoose = require("mongoose");
+const methodOverride = require("method-override");
 
 const session = require("express-session");
 const PORT = process.env.PORT || 3000;
 global.DEBUG = true;
+
+const dbURI =
+  "mongodb+srv://fullstackfinal:finalsprint@cars.n4v2ede.mongodb.net/?retryWrites=true&w=majority";
+
+mongoose
+  .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then((result) => {
+    console.log("connected to db");
+  })
+  .catch((err) => console.log(err));
 
 app.use(
   session({
@@ -19,6 +31,7 @@ app.use(
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
+app.use(methodOverride("_method"));
 app.use(express.urlencoded({ extended: true }));
 
 // load the logEvents module
