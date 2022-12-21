@@ -15,7 +15,6 @@ const myEmitter = new MyEmitter();
 myEmitter.on("log", (event, level, msg) => logEvents(event, level, msg));
 
 const cars_index_mongo_all = (req, res, next) => {
-  console.log(`it's in the function`);
   Car.find()
     .sort({ createdAt: -1 })
     .then((result) => {
@@ -27,6 +26,8 @@ const cars_index_mongo_all = (req, res, next) => {
       console.log(err);
     });
 };
+
+const cars_index_mongo = async (req, res) => {};
 
 const cars_index_pg_all = async (req, res, next) => {
   try {
@@ -86,6 +87,8 @@ router.post("/", async (req, res, next) => {
   } else if (req.body.monCheck == "on" && req.body.keywords === " ") {
     console.log(`it made it to the else if`);
     cars_index_mongo_all(req, res);
+  } else if (req.body.monCheck == "on") {
+    cars_index_mongo(req, res);
   } else {
     console.log(`nothing applies`);
     res.render("cars");
@@ -93,3 +96,7 @@ router.post("/", async (req, res, next) => {
 });
 
 module.exports = router;
+
+// const projection = { name: 1 };
+// const cursor = collection.find().project(projection);
+// await cursor.forEach(console.dir);
