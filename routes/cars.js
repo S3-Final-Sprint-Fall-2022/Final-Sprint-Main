@@ -80,18 +80,45 @@ const cars_index_mongo_all = (req, res, next) => {
 };
 
 const cars_index_mongo = async (req, res) => {
-  console.log("making into the function");
-  console.log(req.body.keywords);
-  try {
-    const search = await Car.find({
-      $title: { $search: req.body.keywords },
-    }).then((result) => res.render("carsmongo", { cars: result }));
-    console.log(search);
-  } catch {
-    res.render("503");
-  }
-  // const results = search.toArray();
-  // console.log(results);
+  Car.find({ car_make: req.body.keywords }, function (err, docs) {
+    if (err) {
+      console.log(err);
+    } else {
+      if (docs == "") {
+        Car.find({ car_model: req.body.keywords }, function (err, docs) {
+          if (err) {
+            console.log(err);
+          } else {
+            if (docs == "") {
+              Car.find(
+                { car_model_year: req.body.keywords },
+                function (err, docs) {
+                  if (err) {
+                    console.log(err);
+                  } else {
+                    console.log(`Searching model year: ${docs}`);
+                    res.render("carsmongo", {
+                      cars: docs,
+                    });
+                  }
+                }
+              );
+            } else {
+              console.log(`Searching model: ${docs}`);
+              res.render("carsmongo", {
+                cars: docs,
+              });
+            }
+          }
+        });
+      } else {
+        console.log(`Searching make: ${docs}`);
+        res.render("carsmongo", {
+          cars: docs,
+        });
+      }
+    }
+  });
 };
 
 const cars_index_pg_all = async (req, res, next) => {
@@ -153,10 +180,8 @@ router.post("/", keywordLogger, async (req, res, next) => {
   } else if (req.body.pgCheck == "on" && req.body.keywords === "all") {
     cars_index_pg_all(req, res);
   } else if (req.body.pgCheck == "on") {
-    console.log(req.body.keywords);
     cars_index_pg(req, res);
   } else if (req.body.monCheck == "on" && req.body.keywords === "all") {
-    console.log(`it made it to the else if`);
     cars_index_mongo_all(req, res);
   } else if (req.body.monCheck == "on") {
     cars_index_mongo(req, res);
